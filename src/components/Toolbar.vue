@@ -14,10 +14,9 @@
         @wheel="onWheel"
       >
         <i @click="$emit('toggle-mute')" :class="this.volume_value==0 || this.muted? 'icon-volume-off' : 'icon-volume-up'"></i>
-        <span class="toggle" data-toggle="#range-container">{{volume}}</span>
+        <span class="toggle"  @click="this.hideVolumePanel = !this.hideVolumePanel">{{volume}}</span>
         <div
-          id="range-container"
-          class="absolute w-12 bg-gray-900 mt-0.5 hidden toggleable"
+          :class="[this.hideVolumePanel?'hidden':'','absolute w-12 bg-gray-900 mt-0.5']"
         >
           <input
             type="range"
@@ -26,7 +25,9 @@
             min="0"
             max="1"
             step="0.1"
-            value="{{volume_value}}"
+            ref="volume_slider"
+            v-model="volumeValue"
+            @input="onInput"
           />
         </div>
       </button>
@@ -46,6 +47,7 @@ export default {
   data() {
     return {
       time: "",
+      hideVolumePanel:true
     };
   },
   props:{
@@ -53,6 +55,16 @@ export default {
       volume:String,
       volume_value:Number,
       muted:Boolean
+  },
+  computed:{
+      volumeValue:{
+          get(){
+              return this.volume_value
+          },
+          set(value){
+              this.voluem_value = value
+          }
+      }
   },
   created() {
       setInterval(this.get_time, 1000);
@@ -79,6 +91,9 @@ export default {
             this.$emit('change-volume',e.deltaY);
           }
     },
+    onInput(e){
+        this.$emit('volume-slider-input',e)
+    }
   },
 };
 </script>

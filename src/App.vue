@@ -1,11 +1,12 @@
 <template>
-  <Toolbar @onPlayClicked="onPlayClicked" 
+  <Toolbar ref="Toolbar" @onPlayClicked="onPlayClicked" 
   :playing="playing" 
   :volume="volume" 
   :volume_value="volume_value"
   :muted="muted" 
   @change-volume="changeVolume"
-  @toggle-mute="mute"/>
+  @toggle-mute="mute"
+  @volume-slider-input="onRangeChanged"/>
   <Player @player-state="onStateChange" @volume-change="onVolumeChanged" ref="Player"/>
 </template>
 
@@ -46,6 +47,9 @@ export default {
       } else {
         this.volume = value + "%";
       }
+    },
+    onRangeChanged(e){
+      this.$refs.Player.setVolume(e.target.value);
     },
     changeVolume(y){
       this.$refs.Player.changeVolume(y);
