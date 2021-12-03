@@ -18,7 +18,7 @@
   />
   <div>
     <div v-for="window in windows" :key="window.id">
-      <Window :id="window.id" :title="window.title" :transparent="window.transparent"  @window-close="closeWindow"/>
+      <Window :id="window.id" :title="window.title" :transparent="window.transparent" :icon="window.icon"  @window-close="closeWindow"/>
     </div>
   </div>
 </template>
@@ -89,11 +89,7 @@ export default {
       this.muted = this.$refs.Player.toggleMute();
     },
     openWindow(window){
-      console.log(window);
       window.id = 'id' + (new Date()).getTime();
-      window.title = window.type;
-      if(window.type == "terminal")
-        window.transparent = true;
       this.windows.push(window);
     },
     closeWindow(id){

@@ -138,13 +138,17 @@ export default {
       if(id == 2){
           this.$emit('open-window',{
             type:"terminal",
-            multiple: true
+            multiple: true,
+            title:"Terminal",
+            icon:"icon-terminal",
+            transparent:true
           });
         }
         if(id == 3){
           this.$emit('open-window',{
             type:"options",
-            multiple: false
+            multiple: false,
+            title:"Options"
           });
         }
     },

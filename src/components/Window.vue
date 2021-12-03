@@ -7,7 +7,7 @@
       @touchstart="onMouseDown"
       @touchend="onMouseUp"
       @touchmove="onDrag">
-      <div class="p-0.5 flex-none title"><i :class="this.icon"></i> {{this.title}}</div>
+      <div class="p-0.5 flex-none title"><i :class="this.icon"></i> <span class="pl-2">{{this.title}}</span></div>
       <div class="flex-auto"></div>
       <div class="p-0.5 toolbar">
         <button class="icon-min-icon"></button>
