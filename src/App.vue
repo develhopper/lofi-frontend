@@ -9,17 +9,24 @@
     @change-volume="changeVolume"
     @toggle-mute="mute"
     @volume-slider-input="onRangeChanged"
+    @open-window="openWindow"
   />
   <Player
     @player-state="onStateChange"
     @volume-change="onVolumeChanged"
     ref="Player"
   />
+  <div>
+    <div v-for="window in windows" :key="window.id">
+      <Window :id="window.id" :title="window.title" :transparent="window.transparent"  @window-close="closeWindow"/>
+    </div>
+  </div>
 </template>
 
 <script>
 import Toolbar from "./components/Toolbar";
 import Player from "./components/Player.vue";
+import Window from './components/Window.vue';
 
 export default {
   name: "App",
@@ -39,6 +46,7 @@ export default {
   components: {
     Toolbar,
     Player,
+    Window,
   },
 
   data() {
@@ -47,6 +55,8 @@ export default {
       volume: "100%",
       volume_value: 1,
       muted: false,
+      windows:[
+      ]
     };
   },
 
@@ -78,6 +88,18 @@ export default {
     mute() {
       this.muted = this.$refs.Player.toggleMute();
     },
+    openWindow(window){
+      console.log(window);
+      window.id = 'id' + (new Date()).getTime();
+      window.title = window.type;
+      if(window.type == "terminal")
+        window.transparent = true;
+      this.windows.push(window);
+    },
+    closeWindow(id){
+      console.log(id)
+      this.windows = this.windows.filter(window => window.id!=id);
+    }
   }
 };
 </script>
