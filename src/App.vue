@@ -18,7 +18,8 @@
   />
   <div>
     <div v-for="window in windows" :key="window.id">
-      <Window :id="window.id" :title="window.title" :transparent="window.transparent" :icon="window.icon"  @window-close="closeWindow"/>
+      <Options v-if="window.type == 'options'" :window="window"  @window-close="closeWindow"/>
+      <Terminal v-if="window.type == 'terminal'" :window="window" @window-close="closeWindow"/>
     </div>
   </div>
 </template>
@@ -26,8 +27,8 @@
 <script>
 import Toolbar from "./components/Toolbar";
 import Player from "./components/Player.vue";
-import Window from './components/Window.vue';
-
+import Terminal from './components/Terminal.vue';
+import Options from './components/Options.vue';
 export default {
   name: "App",
   mounted(){
@@ -46,7 +47,8 @@ export default {
   components: {
     Toolbar,
     Player,
-    Window,
+    Terminal,
+    Options
   },
 
   data() {

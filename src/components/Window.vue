@@ -16,7 +16,9 @@
       </div>
     </div>
 
-    <div class="flex window-content bg-gray-900 w-full h-full" :style="transparent?'--tw-bg-opacity: 0.8':''"></div>
+    <div class="flex window-content bg-gray-900 w-full h-full text-white" :style="transparent?'--tw-bg-opacity: 0.8':''">
+      <slot></slot>
+    </div>
   </div>
 </template>
 
@@ -53,6 +55,8 @@ export default {
       this.mouseDown = true;
       this.position['X'] = this.window.offsetLeft - (e.clientX || e.targetTouches[0].pageX);
       this.position['Y'] = this.window.offsetTop - (e.clientY || e.targetTouches[0].pageY);
+      this.position['width'] = this.window.offsetWidth;
+      this.position['height'] = this.window.offsetHeight;
     },
     onMouseUp(e){
       this.mouseDown = false;
@@ -61,8 +65,14 @@ export default {
     onDrag(e){
       e.preventDefault();
       if(this.mouseDown){
-        this.window.style.left = ((e.clientX || e.targetTouches[0].pageX) + this.position['X']) + 'px';
-        this.window.style.top  = ((e.clientY || e.targetTouches[0].pageY) + this.position['Y']) + 'px';
+        var posX = ((e.clientX || e.targetTouches[0].pageX) + this.position['X']);
+        var posY = ((e.clientY || e.targetTouches[0].pageY) + this.position['Y']);
+        if(posX <= 0 || posX + this.position['width'] >= document.documentElement.offsetWidth)
+          return
+        if(posY <= 0 || posY + this.position['height'] >= document.documentElement.offsetHeight)
+          return
+        this.window.style.left = posX + 'px';
+        this.window.style.top  = posY + 'px';
       }
     }
   }
