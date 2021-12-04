@@ -16,7 +16,7 @@
       </div>
     </div>
 
-    <div class="flex window-content bg-gray-900 w-full h-full text-white" :style="transparent?'--tw-bg-opacity: 0.8':''">
+    <div class="flex window-content bg-gray-900 w-full h-full text-white" :style="transparent?'--tw-bg-opacity: 0.7':''">
       <slot></slot>
     </div>
   </div>
@@ -93,6 +93,7 @@ export default {
   left: 50%;
   top:50%;
   resize: both;
+  box-shadow: 3px 3px 7px black;
 }
 .window-content{
   overflow: hidden;

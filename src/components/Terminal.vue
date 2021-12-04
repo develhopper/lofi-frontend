@@ -45,7 +45,7 @@ export default {
         this.displayPrompt();
     },
     methods:{
-        onKeyPress(e){
+        async onKeyPress(e){
             e.preventDefault();
             var keyCode = e.keyCode;
 
@@ -53,7 +53,7 @@ export default {
                 case 13:
                     this.$refs.content.innerHTML += this.command;
                     this.$refs.content.innerHTML +="\n";
-                    this.processCommand();
+                    await this.processCommand();
                     this.displayPrompt();
                     break;
                 default:
@@ -103,7 +103,7 @@ export default {
             this.$refs.cursor.innerHTML ="";
             this.command = "";
         },
-        processCommand(){
+        async processCommand(){
             var isValid = false;
             if(this.command.trim() === '')
                 return;
@@ -115,16 +115,17 @@ export default {
             for(var i=0;i<this.commands.length; i++){
                 if(cmd === this.commands[i].name){
                     isValid = true;
-                    this.commands[i].function(args);
+                    var result = await this.commands[i].function(args);
+                    this.printResult(result);
                     break;
                 }
             }
 
             if(!isValid){
-                this.$refs.content.innerHTML += "lsh: command not found: "+this.command+"\n";
+                this.$refs.content.innerHTML += "sh: command not found: "+this.command+"\n";
             }
             this.$refs.cursor.innerHTML = "";
-            this.history.push(this.command,);
+            this.history.push(this.command);
             this.historyIndex = this.history.length;
             this.command = "";
         },
@@ -132,8 +133,11 @@ export default {
             this.$refs.cursor.innerHTML = this.$refs.cursor.innerHTML.slice(0, -count)
             this.command = this.command.slice(0, -count);
         },
-        parseHtml(html){
-            return new DOMParser().parseFromString(html, 'text/html').body.childNodes[0];
+        printResult(result){
+            if(result){
+                this.$refs.content.innerHTML += result;
+                this.$refs.content.innerHTML += "\n";
+            }
         }
     }
 }
