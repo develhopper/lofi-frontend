@@ -1,6 +1,6 @@
 <template>
   <div ref="window" class="flex flex-col window">
-    <div class="flex window-toolbar bg-black text-white" 
+    <div class="flex window-toolbar bg-black text-white w-full" 
       @mousedown="onMouseDown" 
       @mouseup="onMouseUp"
       @mousemove="this.onDrag"
@@ -93,5 +93,8 @@ export default {
   left: 50%;
   top:50%;
   resize: both;
+}
+.window-content{
+  overflow: hidden;
 }
 </style>
