@@ -117,7 +117,6 @@ export default {
       this.windows.push(window);
     },
     closeWindow(id) {
-      console.log(id);
       this.windows = this.windows.filter((window) => window.id != id);
     },
     setBackground(url) {

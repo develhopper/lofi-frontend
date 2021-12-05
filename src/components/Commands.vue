@@ -11,7 +11,8 @@ export default {
                 {name:'play', function:this.playStation,description:"change station:\n\tplay {station id}"},
                 {name:"ascii",function:this.ascii,description:"Print ascii art of given input text:\n\t" +
                 "ascii {text} {color name or code} {fontname}\n\tascii lo-fi red binary\n\t ascii lo-fi #000000 binary"+
-                "list of <a href='https://artii.herokuapp.com/fonts_list'>fonts</a>"}
+                "list of <a href='https://artii.herokuapp.com/fonts_list'>fonts</a>"},
+                {name:'exit',function:this.exit,description:"close terminal"}
             ]
         };
     },
@@ -105,8 +106,10 @@ export default {
             else{
                 return {class:"danger",text:"command not available"}
             }
+        },
+        exit(){
+            this.$emit('window-close',this.window.id);
         }
-        
     }
 }
 </script>
