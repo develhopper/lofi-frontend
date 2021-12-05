@@ -3,10 +3,12 @@ export default {
     data(){
         return {
             commands:[
-                {name:'clear',function:this.clear},
-                {name:'ls', function:this.list},
-                {name:'set', function:this.setBackground},
-                {name:'play', function:this.playStation}
+                {name:'clear',function:this.clear,description:"clear terminal screen"},
+                {name:'help', function:this.help,description:"see this guide"},
+                {name:'ls', function:this.list,
+                description:"list of available paths:\n\tls stations #for view list of stations\n\tls backgrounds #for view list of backgrounds"},
+                {name:'set', function:this.setBackground,description:"set background:\n\tset {background id}\n\tset 1"},
+                {name:'play', function:this.playStation,description:"change station:\n\tplay {station id}"}
             ]
         };
     },
@@ -14,14 +16,27 @@ export default {
         clear(){
             this.$refs.content.innerHTML = "";
         },
+        help(){
+            var result= '<p class="font-bold text-blue-300">List of available commands</p><br>';
+            this.commands.forEach(item => {
+                result += `<span class="font-bold text-yellow-400">${item['name']}</span>`
+                result += `<p>\t${item['description']}</p>`;
+                result += "<br>";
+            });
+            return result;
+        },
         async list(args = []){
-            console.log(args.length);
             if(args.length === 0){
                 return this.renderList(["stations", "backgrounds"]);
             }else{
                 const res = await fetch('/api/'+ args[0]);
-                const data = await res.json();
-                return this.renderList(data, {id:"id",text:"title"});
+                if(res.status == 200){
+                    const data = await res.json();
+                    return this.renderList(data, {id:"id",text:"title"});
+                }
+                else{
+                    return {class:"danger",text:"Unable to connect to database"}
+                }
             }
         },
         renderList(list, options={}){
@@ -42,18 +57,29 @@ export default {
             if(args.length == 0)
                 return "Invalid arg: send background id";
             const res = await fetch(`/api/backgrounds/${args[0]}`)
+            console.log(res);
             if(res.status == 200){
                 const data = await res.json();
                 console.log(data);
                 if(data){
-                    document.body.style.backgroundImage = `url(${data['url']})`
+                    this.$emit('set-background', data['url']);
                 }
             }else{
-                return "Background not found";
+                return {class:"danger", text:"Background not found"};
             }
         },
-        playStation(args){
-
+        async playStation(args){
+            if(args.length == 0)
+                return "Invalid arg: send station id";
+            const res = await fetch(`/api/stations/${args[0]}`)
+            if(res.status == 200){
+                const data = await res.json();
+                if(data){
+                    this.$emit('set-station', data['url']);
+                }
+            }else{
+                return {class:"danger", text:"Station not found"};
+            }
         }
         
     }

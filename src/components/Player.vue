@@ -7,6 +7,7 @@
       autoplay
       @play="onPlay"
       @pause="onPause"
+      @playing="onPlaying"
       @volumechange="onVolumeChange"
     >
       <source
@@ -24,6 +25,7 @@ export default {
     return {
       player: "",
       playing: false,
+      station_change:false
     };
   },
   mounted() {
@@ -53,13 +55,28 @@ export default {
                 this.player.volume=parseFloat(volume/100);
         }
     },
+    changeStation(url){
+      this.station_change = true;
+      console.log(this.station_change)
+      this.$refs.player.pause();
+      this.$refs.player.src = url;
+      this.$refs.player.load();
+      // this.$refs.player_source.src = url;
+      this.$refs.player.play();
+    },
     onPlay() {
       this.playing = true;
-      this.$emit("player-state", this.playing);
+      this.$emit('player-state', this.playing);
     },
     onPause() {
       this.playing = false;
       this.$emit("player-state", this.playing);
+    },
+    onPlaying(){
+      if(this.station_change == true){
+        this.$emit("station-changed");
+        this.station_change = false;
+      }
     },
     onVolumeChange() {
       this.$emit('volume-change', this.player.volume);

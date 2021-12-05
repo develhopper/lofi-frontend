@@ -51,7 +51,7 @@ export default {
 
             switch(keyCode){
                 case 13:
-                    this.$refs.content.innerHTML += this.command;
+                    this.$refs.content.innerHTML += this.$refs.cursor.innerHTML;
                     this.$refs.content.innerHTML +="\n";
                     await this.processCommand();
                     this.displayPrompt();
@@ -61,13 +61,14 @@ export default {
             }
         },
         onKeyDown(e){
-
             var keyCode = e.keyCode;
             if(keyCode === 8){
+                e.preventDefault();
                 this.erase(1);
             }
 
             if(keyCode === 38 || keyCode === 40){
+                e.preventDefault();
                 if(keyCode == 38){
                     this.historyIndex--;
                     if(this.historyIndex<0)
@@ -105,6 +106,8 @@ export default {
         },
         async processCommand(){
             var isValid = false;
+            if(this.command !== this.$refs.cursor.innerHTML)
+                this.command = this.$refs.cursor.innerHTML;
             if(this.command.trim() === '')
                 return;
             
@@ -135,6 +138,9 @@ export default {
         },
         printResult(result){
             if(result){
+                if(result instanceof Object){
+                    result = `<span class="${result['class']}">${result['text']}</span>`;
+                }
                 this.$refs.content.innerHTML += result;
                 this.$refs.content.innerHTML += "\n";
             }
@@ -168,6 +174,12 @@ export default {
 .cursor{
     caret-color: transparent;
     outline: none;
+}
+.danger{
+    color:rgb(220, 38, 38)
+}
+.success{
+    color:rgba(5, 150, 105)
 }
 @keyframes blink { 50% { color: transparent; } }
 @keyframes bounceIn {

@@ -14,12 +14,24 @@
   <Player
     @player-state="onStateChange"
     @volume-change="onVolumeChanged"
+    @station-changed="onStationChanged"
     ref="Player"
   />
   <div>
     <div v-for="window in windows" :key="window.id">
-      <Options v-if="window.type == 'options'" :window="window"  @window-close="closeWindow"/>
-      <Terminal v-if="window.type == 'terminal'" :window="window" @window-close="closeWindow"/>
+      <Options
+        v-if="window.type == 'options'"
+        :window="window"
+        @window-close="closeWindow"
+      />
+
+      <Terminal
+        v-if="window.type == 'terminal'"
+        :window="window"
+        @window-close="closeWindow"
+        @set-background="setBackground"
+        @set-station="setStation"
+      />
     </div>
   </div>
 </template>
@@ -27,28 +39,33 @@
 <script>
 import Toolbar from "./components/Toolbar";
 import Player from "./components/Player.vue";
-import Terminal from './components/Terminal.vue';
-import Options from './components/Options.vue';
+import Terminal from "./components/Terminal.vue";
+import Options from "./components/Options.vue";
 export default {
   name: "App",
-  mounted(){
-    document.body.addEventListener('click', function(){
-      let elements = document.querySelectorAll('.toggleable')
-      elements.forEach(function(el){
-        if(el.getAttribute('popup') == "0"){
-          el.classList.add('hidden');
+  mounted() {
+    document.body.addEventListener("click", function () {
+      let elements = document.querySelectorAll(".toggleable");
+      elements.forEach(function (el) {
+        if (el.getAttribute("popup") == "0") {
+          el.classList.add("hidden");
         }
-        if(el.getAttribute('popup') == "1"){
-          el.setAttribute('popup',0);
+        if (el.getAttribute("popup") == "1") {
+          el.setAttribute("popup", 0);
         }
       });
     });
+    this.noise_gif = new Image();
+    this.noise_gif.src = require("./assets/images/1.gif");
+    this.click_sound = new Audio(require("./assets/audio/1.mp3"));
+    this.noise_sound = new Audio(require("./assets/audio/2.mp3"));
+    this.noise_sound.loop = true;
   },
   components: {
     Toolbar,
     Player,
     Terminal,
-    Options
+    Options,
   },
 
   data() {
@@ -57,8 +74,11 @@ export default {
       volume: "100%",
       volume_value: 1,
       muted: false,
-      windows:[
-      ]
+      windows: [],
+      current_background: "",
+      noise_gif: "",
+      click_sound: "",
+      noise_sound: ""
     };
   },
 
@@ -90,15 +110,41 @@ export default {
     mute() {
       this.muted = this.$refs.Player.toggleMute();
     },
-    openWindow(window){
-      window.id = 'id' + (new Date()).getTime();
+    openWindow(window) {
+      window.id = "id" + new Date().getTime();
       this.windows.push(window);
     },
-    closeWindow(id){
-      console.log(id)
-      this.windows = this.windows.filter(window => window.id!=id);
-    }
-  }
+    closeWindow(id) {
+      console.log(id);
+      this.windows = this.windows.filter((window) => window.id != id);
+    },
+    setBackground(url) {
+      document.body.style.backgroundImage = `url('${this.noise_gif.src}')`;
+      this.click_sound.play();
+      setTimeout(function () {
+        var image = new Image();
+        image.onload = function () {
+          document.body.style.backgroundImage = `url('${url}')`;
+        };
+        image.src = url;
+      }, 300);
+    },
+    async setStation(url) {
+      document.body.style.backgroundImage = `url('${this.noise_gif.src}')`;
+      this.click_sound.play();
+      this.noise_sound.play();
+      const res = await fetch("/api/backgrounds/random");
+      const data = await res.json();
+      if (res.status == 200) {
+        this.current_background = data["url"];
+      }
+      this.$refs.Player.changeStation(url);
+    },
+    onStationChanged() {
+      this.noise_sound.pause();
+      document.body.style.backgroundImage = `url('${this.current_background}')`;
+    },
+  },
 };
 </script>
 
