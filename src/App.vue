@@ -55,6 +55,8 @@ export default {
         }
       });
     });
+    document.onselectstart = function(){return false;}
+    document.oncontextmenu = function(){return false;}
     this.noise_gif = new Image();
     this.noise_gif.src = require("./assets/images/1.gif");
     this.click_sound = new Audio(require("./assets/audio/1.mp3"));
