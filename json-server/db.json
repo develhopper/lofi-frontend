@@ -10,5 +10,7 @@
         {"id":2,"title":"Girl","url":"https://i.pinimg.com/originals/a7/53/a1/a753a1d7a63ceebebd970643b59f2cde.gif"},
         {"id":3,"title":"Image","url":"https://i.pinimg.com/originals/2d/45/7d/2d457df61118679bc437a99d89407890.gif"},
         {"id":"random","title":"","url":"https://i.pinimg.com/originals/93/37/2a/93372a1026bf0d80254d38924608aa6d.gif"}
+    ],
+    "ascii":[
     ]
 }

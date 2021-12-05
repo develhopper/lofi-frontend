@@ -8,7 +8,10 @@ export default {
                 {name:'ls', function:this.list,
                 description:"list of available paths:\n\tls stations #for view list of stations\n\tls backgrounds #for view list of backgrounds"},
                 {name:'set', function:this.setBackground,description:"set background:\n\tset {background id}\n\tset 1"},
-                {name:'play', function:this.playStation,description:"change station:\n\tplay {station id}"}
+                {name:'play', function:this.playStation,description:"change station:\n\tplay {station id}"},
+                {name:"ascii",function:this.ascii,description:"Print ascii art of given input text:\n\t" +
+                "ascii {text} {color name or code} {fontname}\n\tascii lo-fi red binary\n\t ascii lo-fi #000000 binary"+
+                "list of <a href='https://artii.herokuapp.com/fonts_list'>fonts</a>"}
             ]
         };
     },
@@ -68,7 +71,7 @@ export default {
                 return {class:"danger", text:"Background not found"};
             }
         },
-        async playStation(args){
+        async playStation(args = []){
             if(args.length == 0)
                 return "Invalid arg: send station id";
             const res = await fetch(`/api/stations/${args[0]}`)
@@ -79,6 +82,28 @@ export default {
                 }
             }else{
                 return {class:"danger", text:"Station not found"};
+            }
+        },
+        async ascii(args = []){
+            if(args.length == 0)
+                return "invalid args, see help";
+            var url = "api/ascii?text="+encodeURIComponent(args[0])
+            var style = "";
+            
+            if(args.length == 2)
+                style = "color:"+args[1];    
+            
+            if(args.length == 3)
+                url += "&font="+encodeURIComponent(args[2])
+            
+            const resp = await fetch(url,{referrerPolicy: 'no-referrer'});
+
+            if(resp.status == 200){
+                const text = await resp.text();
+                return `<span style='${style}'>${text}</span>`
+            }
+            else{
+                return {class:"danger",text:"command not available"}
             }
         }
         
