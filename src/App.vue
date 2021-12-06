@@ -46,6 +46,17 @@ import Options from "./components/Options.vue";
 export default {
   name: "App",
   mounted() {
+    let current_background = this.$cookies.get('current_background');
+    let current_station = this.$cookies.get('current_station');
+    if(current_background){
+      document.body.style.backgroundImage =`url('${current_background}')`;
+      this.current_background = current_background;
+    }
+
+    if(current_station){
+      this.$refs.Player.changeStation(current_station);
+    }
+
     document.body.addEventListener("click", function () {
       let elements = document.querySelectorAll(".toggleable");
       elements.forEach(function (el) {
@@ -123,6 +134,7 @@ export default {
     },
     setBackground(url) {
       document.body.style.backgroundImage = `url('${this.noise_gif.src}')`;
+      this.$cookies.set("current_background", url);
       this.click_sound.play();
       setTimeout(function () {
         var image = new Image();
@@ -134,6 +146,7 @@ export default {
     },
     async setStation(url) {
       document.body.style.backgroundImage = `url('${this.noise_gif.src}')`;
+      this.$cookies.set('current_station',url);
       this.click_sound.play();
       this.noise_sound.play();
       const res = await fetch("/api/backgrounds/random");

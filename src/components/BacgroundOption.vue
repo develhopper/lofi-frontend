@@ -7,7 +7,8 @@
       <h2 class="font-bold absolute bottom-0 bg-gray-900 bg-opacity-50">
         {{background.title}}
       </h2>
-      <button class="option-set-button icon-sliders" @click="$emit('set-background',background.url)"></button>
+      <button :class="[current_background === background.url?'block icon-ok bg-green-700':'hidden icon-sliders', 'option-set-button bg-white']" 
+      @click="onClick(background.url)"></button>
     </div>
   </div>
  </div>
@@ -20,7 +21,8 @@ export default {
         return {
             backgrounds: '',
             error:'',
-            render:false
+            render:false,
+            current_background:''
         }
     },
     async created(){
@@ -32,9 +34,13 @@ export default {
             this.error = "Unable to connect to database";
         }
         this.render = true;
+        this.current_background = this.$cookies.get('current_background')
     },
     methods:{
-
+      onClick(url){
+        this.current_background = url;
+        this.$emit('set-background', url);
+      }
     }
 }
 </script>
@@ -51,10 +57,8 @@ export default {
 }
 
 .option-set-button {
-  display: none;
   cursor: pointer;
   border-radius: 50%;
-  background: white;
   padding: 7px;
   position: absolute;
   color: black;

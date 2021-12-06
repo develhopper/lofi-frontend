@@ -7,7 +7,9 @@
       <h2 class="font-bold absolute bottom-0 bg-gray-900 bg-opacity-50">
         {{station.title}}
       </h2>
-      <button class="option-set-button icon-play" @click="$emit('set-station',station.url)"></button>
+      <button 
+      :class="[this.current_station === station.url?'block bg-blue-500':'hidden','option-set-button icon-play bg-white']" 
+      @click="onClick(station.url)"></button>
     </div>
   </div>
  </div>
@@ -20,7 +22,8 @@ export default {
         return {
             stations: '',
             error:'',
-            render:false
+            render:false,
+            current_station:''
         }
     },
     async created(){
@@ -32,6 +35,13 @@ export default {
             this.error = "Unable to connect to database";
         }
         this.render = true;
+        this.current_station = this.$cookies.get('current_station');
+    },
+    methods:{
+      onClick(url){
+        this.current_station = url;
+        this.$emit('set-station', url);
+      }
     }
 }
 </script>
@@ -48,10 +58,8 @@ export default {
 }
 
 .option-set-button {
-  display: none;
   cursor: pointer;
   border-radius: 50%;
-  background: white;
   padding: 7px;
   position: absolute;
   color: black;
