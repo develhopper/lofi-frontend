@@ -1,5 +1,5 @@
 <template>
-  <div class="flex bg-gray-900 text-white w-full">
+  <div class="flex bg-black text-white w-full toolbar">
     <div class="flex-none w-1/12">
       <button @click="$emit('onPlayClicked')">
         <i :class="this.playing ? 'icon-pause' : 'icon-play'"></i>
@@ -28,7 +28,7 @@
         }}</span>
         <div
           id="range-container"
-          class="absolute w-12 bg-gray-900 mt-0.5 toggleable hidden"
+          class="absolute w-12 bg-black toggleable hidden"
         >
           <input
             type="range"
@@ -178,3 +178,15 @@ export default {
   },
 };
 </script>
+
+<style scoped>
+#range-container{
+  box-shadow: 2px 2px 7px black;
+  border-radius: 0 0 5px;
+  overflow: hidden;
+}
+.toolbar{
+  --tw-bg-opacity: 0.9;
+  box-shadow: 0 2px 7px black;
+}
+</style>

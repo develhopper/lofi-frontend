@@ -1,5 +1,5 @@
 <template>
-  <div :id="id" class="absolute menu bg-gray-900 text-white hidden toggleable" :style="[style,'z-index:100']">
+  <div :id="id" class="absolute menu bg-black text-white hidden toggleable" :style="[style,'z-index:100']">
     <ul class="list-none">
       <li class="item" @click="$emit('item-clicked', item.id)" v-for="item in items" :key="item.id">{{item.text}}</li>
     </ul>
@@ -24,15 +24,17 @@ export default {
     width: auto;
     border-radius: 4px;
     box-shadow: 3px 3px 7px black;
-    border:1px solid cyan;
   }
 .menu .item{
     padding:3px;
-  }
+}
+
+.item:not(:last-child){
+  border-bottom: 1px solid gray;
+}
   
 .menu .item:hover{
     background: #1F2937;
     cursor: pointer;
-    border:1px solid cyan;
   }
 </style>
