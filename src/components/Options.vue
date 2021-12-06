@@ -26,10 +26,10 @@
           </li>
         </ul>
       </div>
-      <div class="flex-col w-full h-full">
+      <div class="flex-col w-full h-full overflow-y-scroll">
         <h3 class="w-full border-b p-1">{{ tabs[active_tab] }}</h3>
-        
-        
+        <BackgroundOption v-show="active_tab === 0" @set-background="$emit('set-background',$event)"/>
+        <StationOption v-show="active_tab === 1" @set-station="$emit('set-station',$event)"/>
       </div>
     </div>
   </Window>
@@ -37,11 +37,14 @@
 
 <script>
 import Window from "./Window.vue";
+import BackgroundOption from "./BacgroundOption.vue";
+import StationOption from "./StationOption.vue";
 
 export default {
   name: "Options",
   components: {
     Window,
+    BackgroundOption,StationOption
   },
   props: {
     window: Object,
@@ -64,7 +67,9 @@ export default {
     },
     onMouseMove(e) {
       if (this.mouse_down) {
-        this.$refs.panel.style.width = e.layerX + "px";
+        var right = this.$refs.panel.getBoundingClientRect().left + this.$refs.panel.offsetWidth;
+        var move = e.clientX - right;
+        this.$refs.panel.style.width = (this.$refs.panel.offsetWidth + move) + "px";
       }
     },
     onMouseUp() {

@@ -1,15 +1,15 @@
 {
     "stations":[
-        {"id":1,"title":"Box: Lofi radio","url":"https://boxradio-edge-07.streamafrica.net/lofi"},
-        {"id":2, "title": "Chillsky", "url":"https://lfhh.radioca.st/stream"},
-        {"id":3,"title": "boolout", "url": "https://ec2.yesstreaming.net:1915/stream"}
+        {"id":1,"title":"Box: Lofi radio","url":"https://boxradio-edge-07.streamafrica.net/lofi", "thumbnail":"https://picsum.photos/seed/1/200"},
+        {"id":2, "title": "Chillsky", "url":"https://lfhh.radioca.st/stream", "thumbnail":"https://picsum.photos/seed/2/200"},
+        {"id":3,"title": "boolout", "url": "https://ec2.yesstreaming.net:1915/stream", "thumbnail":"https://picsum.photos/seed/3/200"}
         
     ],
     "backgrounds":[
-        {"id":1,"title":"Lovers","url":"https://i.pinimg.com/originals/93/37/2a/93372a1026bf0d80254d38924608aa6d.gif"},
-        {"id":2,"title":"Girl","url":"https://i.pinimg.com/originals/a7/53/a1/a753a1d7a63ceebebd970643b59f2cde.gif"},
-        {"id":3,"title":"Image","url":"https://i.pinimg.com/originals/2d/45/7d/2d457df61118679bc437a99d89407890.gif"},
-        {"id":"random","title":"","url":"https://i.pinimg.com/originals/93/37/2a/93372a1026bf0d80254d38924608aa6d.gif"}
+        {"id":1,"title":"Lovers","url":"https://i.pinimg.com/originals/93/37/2a/93372a1026bf0d80254d38924608aa6d.gif", "thumbnail":"https://picsum.photos/seed/4/200"},
+        {"id":2,"title":"Girl","url":"https://i.pinimg.com/originals/a7/53/a1/a753a1d7a63ceebebd970643b59f2cde.gif", "thumbnail":"https://picsum.photos/seed/5/200"},
+        {"id":3,"title":"Image","url":"https://i.pinimg.com/originals/2d/45/7d/2d457df61118679bc437a99d89407890.gif", "thumbnail":"https://picsum.photos/seed/6/200"},
+        {"id":"random","title":"random","url":"https://i.pinimg.com/originals/93/37/2a/93372a1026bf0d80254d38924608aa6d.gif", "thumbnail":"https://picsum.photos/seed/7/200"}
     ],
     "ascii":[
     ]

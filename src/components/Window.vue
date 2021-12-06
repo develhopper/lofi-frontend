@@ -60,7 +60,7 @@ export default {
     },
     onMouseUp(e){
       this.mouseDown = false;
-      e.target.style.cursor = "default";
+      e.target.style.cursor = "";
     },
     onDrag(e){
       e.preventDefault();

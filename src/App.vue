@@ -23,6 +23,8 @@
         v-if="window.type == 'options'"
         :window="window"
         @window-close="closeWindow"
+        @set-background="setBackground"
+        @set-station="setStation"
       />
 
       <Terminal
