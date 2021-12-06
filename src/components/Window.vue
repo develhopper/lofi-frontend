@@ -67,7 +67,7 @@ export default {
       if(this.mouseDown){
         var posX = ((e.clientX || e.targetTouches[0].pageX) + this.position['X']);
         var posY = ((e.clientY || e.targetTouches[0].pageY) + this.position['Y']);
-        if(posX <= 0 || posX + this.position['width'] >= document.documentElement.offsetWidth)
+        if(posX <= 0 && e.movementX<0  || posX + this.position['width'] >= document.documentElement.offsetWidth && e.movementX>0)
           return
         if(posY <= 0 || posY + this.position['height'] >= document.documentElement.offsetHeight)
           return
