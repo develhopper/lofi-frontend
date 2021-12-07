@@ -10,8 +10,8 @@
       <div class="p-0.5 flex-none title"><i :class="this.icon"></i> <span class="pl-2">{{this.title}}</span></div>
       <div class="flex-auto"></div>
       <div class="p-0.5 toolbar">
-        <button class="icon-min-icon"></button>
-        <button class="icon-max-icon"></button>
+        <button class="icon-min-icon" @click="minimize"></button>
+        <button class="icon-max-icon" @click="maximize"></button>
         <button class="icon-cancel-circled text-red-400" @click="$emit('window-close',this.id)"></button>
       </div>
     </div>
@@ -34,8 +34,8 @@ export default {
   },
   mounted(){
     this.window = this.$refs.window;
-    this.window.style.left = (this.window.offsetLeft /2) +"px";
-    this.window.style.top = (this.window.offsetTop /2) +"px";
+    this.window.style.left = ((document.documentElement.offsetWidth /2)-(this.window.offsetWidth /2)) +"px";
+    this.window.style.top = ((document.documentElement.offsetHeight / 2) - (this.window.offsetHeight/2)) +"px";
   },
   data(){
     return {
@@ -46,7 +46,14 @@ export default {
         mouseX:0,
         mouseY:0
       },
-      window:''
+      window:'',
+      state:{
+        type:'normal',
+        width:0,
+        height:0,
+        top:0,
+        left:0
+      }
     }
   },
   methods:{
@@ -74,6 +81,34 @@ export default {
         this.window.style.left = posX + 'px';
         this.window.style.top  = posY + 'px';
       }
+    },
+    maximize(){
+      if(this.state.type !== 'maximized'){
+      this.state.width = this.$refs.window.offsetWidth+'px';
+      this.state.height = this.$refs.window.offsetHeight+'px';
+      this.state.top = this.$refs.window.offsetTop;
+      this.state.left = this.$refs.window.offsetLeft;
+      this.$refs.window.style.width = document.documentElement.offsetWidth+'px';
+      this.$refs.window.style.height = (document.documentElement.offsetHeight - 24)+'px'
+      this.$refs.window.style.left = 0;
+      this.$refs.window.style.top = 24+"px";
+      this.state.type = "maximized";
+    }else if(this.state.type == "maximized" || this.state.type == "minimized"){
+      this.$refs.window.style.width = this.state.width;
+      this.$refs.window.style.height = this.state.height;
+      this.$refs.window.style.top = this.state.top+'px';
+      this.$refs.window.style.left = this.state.left+'px';
+      this.state.type = "normal"
+    }
+    },
+    minimize(){
+      if(this.state.type !== "minimized"){
+        this.state.width = this.$refs.window.offsetWidth+'px';
+        this.state.height = this.$refs.window.offsetHeight+'px';
+        this.state.top = this.$refs.window.offsetTop;
+        this.state.left = this.$refs.window.offsetLeft;
+        this.$emit('minimize-window',this.id);
+      }
     }
   }
 };
@@ -90,8 +125,6 @@ export default {
   border-radius: 5px;
   overflow: hidden;
   position: absolute;
-  left: 50%;
-  top:50%;
   resize: both;
   box-shadow: 3px 3px 7px black;
 }

@@ -4,7 +4,8 @@
     :title="window.title"
     :transparent="window.transparent"
     :icon="window.icon"
-    @window-close="$emit('window-close',window.id)">
+    @window-close="$emit('window-close',window.id)"
+    @minimize-window="$emit('minimize-window',window.id)">
         <div ref="terminal" 
         class="terminal w-full h-full pl-1" 
         tabindex="0" 

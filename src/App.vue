@@ -17,14 +17,17 @@
     @station-changed="onStationChanged"
     ref="Player"
   />
+
   <div>
-    <div v-for="window in windows" :key="window.id">
+    <transition-group name="fade">
+    <div v-for="window in activeWindows" :key="window.id">
       <Options
         v-if="window.type == 'options'"
         :window="window"
         @window-close="closeWindow"
         @set-background="setBackground"
         @set-station="setStation"
+        @minimize-window="minimizeWindow"
       />
 
       <Terminal
@@ -33,7 +36,18 @@
         @window-close="closeWindow"
         @set-background="setBackground"
         @set-station="setStation"
+        @minimize-window="minimizeWindow"
       />
+    </div>
+    </transition-group>
+  </div>
+
+  <div class="flex flex-col flex-wrap m-4">
+    <div v-for="window in minimizedWindows" :key="window.id" 
+    class="flex flex-col w-16 mt-4 desktop-icon"
+    @click="onIconClick(window.id)">
+      <i :class="[window.icon||'icon-window','text-center']"></i>
+      <p class="text-center">{{window.title}}</p>
     </div>
   </div>
 </template>
@@ -97,6 +111,18 @@ export default {
     };
   },
 
+  computed:{
+    minimizedWindows:{
+      get(){
+        return this.windows.filter((window) => window.minimized == true)
+      }
+    },
+    activeWindows:{
+      get(){
+        return this.windows.filter((window) => window.minimized == false)
+      }
+    }
+  },
   methods: {
     onPlayClicked() {
       this.$refs.Player.toggle();
@@ -127,6 +153,7 @@ export default {
     },
     openWindow(window) {
       window.id = "id" + new Date().getTime();
+      window.minimized = false;
       this.windows.push(window);
     },
     closeWindow(id) {
@@ -160,6 +187,19 @@ export default {
       this.noise_sound.pause();
       document.body.style.backgroundImage = `url('${this.current_background}')`;
     },
+    minimizeWindow(id){
+      this.windows.forEach(function(window){
+        if(window.id === id){
+          window.minimized = true;
+        }
+      });
+    },
+    onIconClick(id){
+      this.windows.forEach(function(window){
+        if(window.id == id)
+          window.minimized = false;
+      });
+    }
   },
 };
 </script>
@@ -171,6 +211,7 @@ body {
   background-repeat: no-repeat;
   background-size: cover;
   height: 100%;
+  overflow: hidden;
 }
 
 html {
@@ -183,8 +224,35 @@ html {
   height: 100px;
   padding: 0 5px;
 }
-
-.bg-gray-900 {
-  --tw-bg-opacity: 0.9;
+.desktop-icon{
+  color:white;
+  padding:2px;
+  text-shadow: 2px 2px 7px black;
+  cursor:pointer;
 }
+.desktop-icon:hover{
+  color:gray
+}
+.fade-enter-from{
+  transform: scale(0);
+}
+.fade-enter-to{
+  transform: scale(1);
+  transform-origin: center;
+}
+.fade-enter-active{
+  transition: all 0.5s ease;
+}
+.fade-leave-from{
+  opacity: 1;
+}
+.fade-leave-to{
+  opacity: 0;
+  transform: scale(0);
+  transform-origin: top left;
+}
+.fade-leave-active{
+  transition: all 0.5s ease;
+}
+
 </style>
