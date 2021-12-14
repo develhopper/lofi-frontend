@@ -85,7 +85,7 @@ export default {
     document.onselectstart = function(){return false;}
     document.oncontextmenu = function(){return false;}
     this.noise_gif = new Image();
-    this.noise_gif.src = require("./assets/images/1.gif");
+    this.noise_gif.src = require("./assets/images/1.gif").default;
     this.click_sound = new Audio(require("./assets/audio/1.mp3"));
     this.noise_sound = new Audio(require("./assets/audio/2.mp3"));
     this.noise_sound.loop = true;
@@ -235,13 +235,14 @@ html {
 }
 .fade-enter-from{
   transform: scale(0);
+  transform-origin: top left;
 }
 .fade-enter-to{
   transform: scale(1);
   transform-origin: center;
 }
 .fade-enter-active{
-  transition: all 0.5s ease;
+  transition: all 0.3s ease;
 }
 .fade-leave-from{
   opacity: 1;
@@ -252,7 +253,7 @@ html {
   transform-origin: top left;
 }
 .fade-leave-active{
-  transition: all 0.5s ease;
+  transition: all 0.3s ease;
 }
 
 </style>

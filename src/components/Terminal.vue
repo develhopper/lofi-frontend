@@ -161,9 +161,6 @@ export default {
 .terminal{
     outline: none;
     white-space: pre-wrap;
-	white-space: -moz-pre-wrap;
-	white-space: -pre-wrap;
-	white-space: -o-pre-wrap;
 	word-wrap: break-word;
     overflow-y: auto;  
 }
